@@ -2,7 +2,7 @@
 Implementation of an object oriented program that implements creating various Shapes
 
 author: Morgan Allen
-cource: csci 5448 Object Oriented Analysis and Design
+course: csci 5448 Object Oriented Analysis and Design
 due date: 2/1/2019
 """
 
