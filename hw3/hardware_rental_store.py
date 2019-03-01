@@ -1,4 +1,3 @@
-import numpy as np
 import random
 
 class Tool(object):
@@ -239,7 +238,7 @@ class Simulation(object):
                                                                                  self.store.customers[customer_id].name, 
                                                                            self.store.customers[customer_id].max_tools))
 
-        elif self.store.customers[customer_id].min_tools >= self.store.get_num_available_tools():
+        elif self.store.customers[customer_id].min_tools > self.store.get_num_available_tools():
             print("\t{} wants at least {} tools ({} available), and so leaves store without renting.".format(
                                                                             self.store.customers[customer_id].name,
                                                                             self.store.customers[customer_id].max_tools,
@@ -251,8 +250,12 @@ class Simulation(object):
 
             # Choose a list of random tools from the available inventory
             num_tools = random.randint(self.store.customers[customer_id].min_tools, 
-                            min(self.store.customers[customer_id].max_tools, self.store.get_num_available_tools())+1)
+                            min(self.store.customers[customer_id].max_tools, self.store.get_num_available_tools()))
 
+            # print(self.store.customers[customer_id].min_tools)
+            # print(self.store.get_num_available_tools())
+            # print(self.store.get_inventory().keys())
+            # print(num_tools)
             tool_id_list = random.sample(self.store.get_inventory().keys(), num_tools)
 
             # Add the randomized available tools to a dict
@@ -290,7 +293,7 @@ class Simulation(object):
         print("\n")
 
         # Choose 1-5 random customers to arrive today
-        customers_today = np.random.choice(range(1,11),np.random.choice(range(1,6), replace=False))
+        customers_today = random.sample(range(1,11), random.randint(1,6))
 
         print("Rentals")
         # Each customer will see if they can make a rental
