@@ -50,7 +50,8 @@ class Rental(object):
                                                  self.day_rented, self.day_rented+self.nights_rented)
 
     def daily_update(self, current_day):
-        self.nights_remaining = self.nights_remaining - 1
+        if self.nights_remaining > 0:
+            self.nights_remaining = self.nights_remaining - 1
         if(self.nights_remaining) == 0:
             self.day_returned = current_day
 
@@ -231,15 +232,14 @@ class Simulation(object):
 
     def simulate_customer_rental(self, day, customer_id):
         print("\t{}".format(self.store.customers[customer_id]))
-        print("\t{} arrives in store.".format(self.store.customers[customer_id].name))
 
         if self.store.customers[customer_id].get_num_tools_rented() >= self.store.customers[customer_id].max_tools:
-            print("\t{} already has maximum tools rented ({}), and so leaves the store without renting.".format(
+            print("\t\t{} already has maximum tools rented ({}), and so leaves the store without renting.".format(
                                                                                  self.store.customers[customer_id].name, 
                                                                            self.store.customers[customer_id].max_tools))
 
         elif self.store.customers[customer_id].min_tools > self.store.get_num_available_tools():
-            print("\t{} wants at least {} tools ({} available), and so leaves store without renting.".format(
+            print("\t\t{} wants at least {} tools ({} available), and so leaves store without renting.".format(
                                                                             self.store.customers[customer_id].name,
                                                                             self.store.customers[customer_id].max_tools,
                                                                             self.store.get_num_available_tools()))
@@ -252,10 +252,6 @@ class Simulation(object):
             num_tools = random.randint(self.store.customers[customer_id].min_tools, 
                             min(self.store.customers[customer_id].max_tools, self.store.get_num_available_tools()))
 
-            # print(self.store.customers[customer_id].min_tools)
-            # print(self.store.get_num_available_tools())
-            # print(self.store.get_inventory().keys())
-            # print(num_tools)
             tool_id_list = random.sample(self.store.get_inventory().keys(), num_tools)
 
             # Add the randomized available tools to a dict
@@ -265,9 +261,10 @@ class Simulation(object):
 
             # Have the customer rent the randomized tools for the randomized number of nights.
             rental = self.store.rent(self.store.customers[customer_id], day, nights, tools)
-            print("\t{} pays ${:.2f} to rent {} tools for {} nights".format(self.store.customers[customer_id], 
+            print("\t\t{} pays ${:.2f} to rent {} tools for {} nights".format(self.store.customers[customer_id], 
                                                                                rental.get_price(), num_tools, nights))
             print("\t\t{}".format(rental))
+            
             print("\t{}".format(self.store.customers[customer_id]))
         print("\n")
 
@@ -281,7 +278,9 @@ class Simulation(object):
                 print("\t{}".format(rental))
 
     def simulate_day(self, day):
+        print("{}".format('*'*10))
         print("DAY {}".format(day))
+        print("{}".format('*'*10))
 
         print("Returns")
         self.simulate_returns(day)
@@ -317,4 +316,4 @@ class Simulation(object):
 
 
 sim = Simulation()
-sim.run_simulation(36)
+sim.run_simulation(35)
